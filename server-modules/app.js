@@ -23,6 +23,7 @@ const apiRouter = require('./api-router');
 const tool = require('./tool');
 const config = require('./config');
 
+
 // 设置 view 引擎
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
@@ -74,5 +75,38 @@ app.use((req, res, next) => {
   res.sendFile(path.dirname(require.main.filename) + '/public/index.html');
   // res.status(404);
 });
+//chendabegin
+// 使用 Express 路由 API 服务 /hello 的 HTTP GET 请求
+app.get('/hello', function(req, res) {
+  res.render('hello', { message: 'Congrats, you just set up your app!' });
+});
+
+app.get('/weixin', function(req, res) {
+  console.log('weixin req:', req.query);
+  weixin.exec(req.query, function(err, data) {
+    if (err) {
+      return res.send(err.code || 500, err.message);
+    }
+    return res.send(data);
+  });
+})
+
+app.post('/weixin', function(req, res) {
+  console.log('weixin req:', req.body);
+  weixin.exec(req.body, function(err, data) {
+    if (err) {
+      return res.send(err.code || 500, err.message);
+    }
+    var builder = new xml2js.Builder();
+    var xml = builder.buildObject(data);
+    console.log('res:', data)
+    res.set('Content-Type', 'text/xml');
+    return res.send(xml);
+  });
+})
+
+// 最后，必须有这行代码来使 express 响应 HTTP 请求
+app.listen();
+//chendaend
 
 module.exports = app;

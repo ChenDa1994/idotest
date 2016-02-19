@@ -10,7 +10,10 @@
 'use strict';
 
 let config = {
-
+  // chendabegin
+  //微信token
+  token: 'weixin',
+  // chendaend
   // 服务端 host
   host: 'http://localhost:3000',
 
