@@ -1,14 +1,22 @@
+'use strict';
 var crypto = require('crypto');
 var config = require('./config');
-var debug = require('debug')('AV:ido');
-
-exports.exec = function(params, cb) {
+var debug = require('debug')('AV:weixin');
+let pub = {};
+pub.exec = (params, cb) => {
   if (params.signature) {
     checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
   } else {
     receiveMessage(params, cb)
   }
 }
+// exports.exec = function(params, cb) {
+//   if (params.signature) {
+//     checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
+//   } else {
+//     receiveMessage(params, cb)
+//   }
+// }
 
 // 验证签名
 var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
@@ -37,3 +45,5 @@ var receiveMessage = function(msg, cb) {
   }
   cb(null, result);
 }
+
+module.exports = pub;

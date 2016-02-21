@@ -110,6 +110,6 @@ app.use((req, res, next) => {
   res.sendFile(path.dirname(require.main.filename) + '/public/index.html');
   // res.status(404);
 });
-
+app.listen();
 
 module.exports = app;
