@@ -64,7 +64,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 // 使用 LeanEngine 中间件
-//app.use(bodyParser());    // 读取请求 body 的中间件
+app.use(bodyParser());    // 读取请求 body 的中间件
 app.use(xmlBodyParser);
 app.use(AV.Cloud);
 app.use(bodyParser.json());

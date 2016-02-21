@@ -1,22 +1,22 @@
-'use strict';
+// 'use strict';
 var crypto = require('crypto');
 var config = require('./config');
 var debug = require('debug')('AV:weixin');
-let pub = {};
-pub.exec = (params, cb) => {
-  if (params.signature) {
-    checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
-  } else {
-    receiveMessage(params, cb)
-  }
-}
-// exports.exec = function(params, cb) {
+// let pub = {};
+// pub.exec = (params, cb) => {
 //   if (params.signature) {
 //     checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
 //   } else {
 //     receiveMessage(params, cb)
 //   }
 // }
+exports.exec = function(params, cb) {
+  if (params.signature) {
+    checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
+  } else {
+    receiveMessage(params, cb)
+  }
+}
 
 // 验证签名
 var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
@@ -25,10 +25,12 @@ var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
   debug('code:', code)
   if (code == signature) {
     cb(null, echostr);
+    console.log('checkSignature successed!')
   } else {
     var err = new Error('Unauthorized');
     err.code = 401;
     cb(err);
+    console.log('checkSignature failed!')
   }
 }
 
@@ -46,4 +48,4 @@ var receiveMessage = function(msg, cb) {
   cb(null, result);
 }
 
-module.exports = pub;
+// module.exports = pub;
