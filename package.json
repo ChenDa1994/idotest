@@ -13,6 +13,9 @@
     "cookie-parser": "^1.3.5",
     "ejs": "2.3.1",
     "express": "4.12.3",
-    "leanengine": "^0.2.0"
+    "leanengine": "^0.2.0",
+    "xnl2js": "0.4.16",
+    "debug": "2.2.0",
+    "utils": "0.3.1"
   }
 }

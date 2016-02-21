@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 var config = require('./config');
-var debug = require('debug')('AV:weixin');
+var debug = require('debug')('AV:ido');
 
 exports.exec = function(params, cb) {
   if (params.signature) {

@@ -13,6 +13,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const AV = require('leanengine');
+var xml2js = require('xml2js');
+var utils = require('utils');
 const app = express();
 
 // babel 编译
@@ -24,13 +26,46 @@ const tool = require('./tool');
 const config = require('./config');
 
 
+// 解析微信的 xml 数据
+var xmlBodyParser = function (req, res, next) {
+  if (req._body) return next();
+  req.body = req.body || {};
+
+  // ignore GET
+  if ('GET' == req.method || 'HEAD' == req.method) return next();
+
+  // check Content-Type
+  if ('text/xml' != utils.mime(req)) return next();
+
+  // flag as parsed
+  req._body = true;
+
+  // parse
+  var buf = '';
+  req.setEncoding('utf8');
+  req.on('data', function(chunk){ buf += chunk });
+  req.on('end', function(){  
+    xml2js.parseString(buf, function(err, json) {
+      if (err) {
+          err.status = 400;
+          next(err);
+      } else {
+          req.body = json;
+          next();
+      }
+    });
+  });
+};
+
 // 设置 view 引擎
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
 // 使用 LeanEngine 中间件
+//app.use(bodyParser());    // 读取请求 body 的中间件
+app.use(xmlBodyParser);
 app.use(AV.Cloud);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -75,38 +110,6 @@ app.use((req, res, next) => {
   res.sendFile(path.dirname(require.main.filename) + '/public/index.html');
   // res.status(404);
 });
-//chendabegin
-// 使用 Express 路由 API 服务 /hello 的 HTTP GET 请求
-app.get('/hello', function(req, res) {
-  res.render('hello', { message: 'Congrats, you just set up your app!' });
-});
 
-app.get('/weixin', function(req, res) {
-  console.log('weixin req:', req.query);
-  weixin.exec(req.query, function(err, data) {
-    if (err) {
-      return res.send(err.code || 500, err.message);
-    }
-    return res.send(data);
-  });
-})
-
-app.post('/weixin', function(req, res) {
-  console.log('weixin req:', req.body);
-  weixin.exec(req.body, function(err, data) {
-    if (err) {
-      return res.send(err.code || 500, err.message);
-    }
-    var builder = new xml2js.Builder();
-    var xml = builder.buildObject(data);
-    console.log('res:', data)
-    res.set('Content-Type', 'text/xml');
-    return res.send(xml);
-  });
-})
-
-// 最后，必须有这行代码来使 express 响应 HTTP 请求
-app.listen();
-//chendaend
 
 module.exports = app;
