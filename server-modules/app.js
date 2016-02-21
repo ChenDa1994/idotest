@@ -24,7 +24,7 @@ require('babel-core/register');
 const apiRouter = require('./api-router');
 const tool = require('./tool');
 const config = require('./config');
-
+var weixin = require('./weixin');
 
 // 解析微信的 xml 数据
 var xmlBodyParser = function (req, res, next) {
@@ -103,6 +103,33 @@ app.all('/api/*', (req, res, next) => {
 
 // api
 app.use('/api', apiRouter);
+app.get('/hallo', function(req, res) {
+  res.render('hallo', { message: 'Congrats, you just set up your app!' });
+});
+
+app.get('/weixin', function(req, res) {
+  console.log('weixin req:', req.query);
+  weixin.exec(req.query, function(err, data) {
+    if (err) {
+      return res.send(err.code || 500, err.message);
+    }
+    return res.send(data);
+  });
+})
+
+app.post('/weixin', function(req, res) {
+  console.log('weixin req:', req.body);
+  weixin.exec(req.body, function(err, data) {
+    if (err) {
+      return res.send(err.code || 500, err.message);
+    }
+    var builder = new xml2js.Builder();
+    var xml = builder.buildObject(data);
+    console.log('res:', data)
+    res.set('Content-Type', 'text/xml');
+    return res.send(xml);
+  });
+})
 
 // 如果任何路由都没匹配到，则认为 404
 // 生成一个异常让后面的 err handler 捕获
