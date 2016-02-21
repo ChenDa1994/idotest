@@ -10,7 +10,8 @@
 'use strict';
 
 const router = require('express').Router();
-
+var xml2js = require('xml2js');
+var utils = require('utils');
 // 添加一个模块
 const weixin = require('./weixin');
 const hello = require('./hello');
