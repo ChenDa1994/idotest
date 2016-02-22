@@ -108,7 +108,7 @@ app.get('/hallo', function(req, res) {
 });
 
 app.get('/weixin', function(req, res) {
-  console.log('weixin req:', req.query);
+  console.log('weixin reqget:', req.query);
   weixin.exec(req.query, function(err, data) {
     if (err) {
       return res.send(err.code || 500, err.message);
@@ -118,7 +118,7 @@ app.get('/weixin', function(req, res) {
 })
 
 app.post('/weixin', function(req, res) {
-  console.log('weixin req:', req.body);
+  console.log('weixin reqpost:', req.body);
   weixin.exec(req.body, function(err, data) {
     if (err) {
       return res.send(err.code || 500, err.message);

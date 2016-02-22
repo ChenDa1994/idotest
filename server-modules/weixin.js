@@ -36,6 +36,7 @@ var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
 
 // 接收普通消息
 var receiveMessage = function(msg, cb) {
+  //console.log(msg.xml);
   var result = {
     xml: {
       ToUserName: msg.xml.FromUserName[0],
@@ -45,7 +46,9 @@ var receiveMessage = function(msg, cb) {
       Content: '你好，你发的内容是「' + msg.xml.Content + '」。'
     }
   }
+  //console.log(result);
   cb(null, result);
 }
 
 // module.exports = pub;
+//http://localhost:3000/weixin?FromUserName=chenda&ToUserName=sb&Content=goodbye
