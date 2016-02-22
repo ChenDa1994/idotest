@@ -27,15 +27,19 @@ const config = require('./config');
 var weixin = require('./weixin');
 
 // 解析微信的 xml 数据
-var weixinxmlBodyParser = function (req, res, next) {
+var xmlBodyParser = function (req, res, next) {
   if (req._body) return next();
   req.body = req.body || {};
+
   // ignore GET
   if ('GET' == req.method || 'HEAD' == req.method) return next();
+
   // check Content-Type
   if ('text/xml' != utils.mime(req)) return next();
+
   // flag as parsed
   req._body = true;
+
   // parse
   var buf = '';
   req.setEncoding('utf8');
@@ -61,7 +65,7 @@ app.use(express.static('public'));
 
 // 使用 LeanEngine 中间件
 //app.use(bodyParser());    // 读取请求 body 的中间件
-app.use(weixinxmlBodyParser);
+app.use(xmlBodyParser);
 app.use(AV.Cloud);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
