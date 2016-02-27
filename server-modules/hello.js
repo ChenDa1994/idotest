@@ -11,6 +11,7 @@
 
 const tool = require('./tool');
 const mrender = require('./tools/mrender')
+
 let pub = {};
 
 // 测试服务是否通畅
@@ -18,4 +19,5 @@ pub.hello = (req, res) => {
   tool.l('It works.');
   mrender.renderSuccess(res);
 };
+
 module.exports = pub;

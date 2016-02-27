@@ -23,4 +23,3 @@ pub.fail = (res, err) => {
 };
 
 module.exports = pub;
-

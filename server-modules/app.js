@@ -13,8 +13,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const AV = require('leanengine');
-var xml2js = require('xml2js');
-var utils = require('utils');
 const app = express();
 
 // babel 编译
@@ -24,7 +22,9 @@ require('babel-core/register');
 const apiRouter = require('./api-router');
 const tool = require('./tool');
 const config = require('./config');
-var weixin = require('./weixin');
+
+var xml2js = require('xml2js');
+var utils = require('connect').utils;
 
 // 解析微信的 xml 数据
 var xmlBodyParser = function (req, res, next) {
@@ -44,7 +44,7 @@ var xmlBodyParser = function (req, res, next) {
   var buf = '';
   req.setEncoding('utf8');
   req.on('data', function(chunk){ buf += chunk });
-  req.on('end', function(){  
+  req.on('end', function(){
     xml2js.parseString(buf, function(err, json) {
       if (err) {
           err.status = 400;
@@ -58,20 +58,19 @@ var xmlBodyParser = function (req, res, next) {
 };
 
 // 设置 view 引擎
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
 // 使用 LeanEngine 中间件
-//app.use(bodyParser());    // 读取请求 body 的中间件
-app.use(xmlBodyParser);
 app.use(AV.Cloud);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+app.use(xmlBodyParser);
 
 // 未处理异常捕获 middleware
 app.use((req, res, next) => {
@@ -103,33 +102,6 @@ app.all('/api/*', (req, res, next) => {
 
 // api
 app.use('/api', apiRouter);
-app.get('/hallo', function(req, res) {
-  res.render('hallo', { message: 'Congrats, you just set up your app!' });
-});
-
-app.get('/weixin', function(req, res) {
-  console.log('weixin reqget:', req.query);
-  weixin.exec(req.query, function(err, data) {
-    if (err) {
-      return res.send(err.code || 500, err.message);
-    }
-    return res.send(data);
-  });
-})
-
-app.post('/weixin', function(req, res) {
-  console.log('weixin reqpost:', req.body);
-  weixin.exec(req.body, function(err, data) {
-    if (err) {
-      return res.send(err.code || 500, err.message);
-    }
-    var builder = new xml2js.Builder();
-    var xml = builder.buildObject(data);
-    console.log('res:', data)
-    res.set('Content-Type', 'text/xml');
-    return res.send(xml);
-  });
-})
 
 // 如果任何路由都没匹配到，则认为 404
 // 生成一个异常让后面的 err handler 捕获
@@ -137,6 +109,5 @@ app.use((req, res, next) => {
   res.sendFile(path.dirname(require.main.filename) + '/public/index.html');
   // res.status(404);
 });
-app.listen();
 
 module.exports = app;

@@ -10,10 +10,18 @@
 'use strict';
 
 const router = require('express').Router();
+
 // 添加一个模块
 const hello = require('./hello');
+const wechat = require('./wechat')
+
 // 一个 API 路由下的 hello 接口，访问 /api/hello
-router.get('/hello',hello.hello);
+router.get('/hello', hello.hello);
+
+router.get('/wechat', wechat.wechat_get);
+
+router.post('/wechat', wechat.wechat_post);
+
 
 // 测试 async/await 支持
 // const f = () => {

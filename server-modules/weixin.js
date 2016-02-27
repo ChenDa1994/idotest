@@ -1,15 +1,6 @@
-// 'use strict';
 var crypto = require('crypto');
-var config = require('./config');
-var debug = require('debug')('AV:weixin');
-// let pub = {};
-// pub.exec = (params, cb) => {
-//   if (params.signature) {
-//     checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
-//   } else {
-//     receiveMessage(params, cb)
-//   }
-// }
+var config = require('./config/wechat.js');
+
 exports.exec = function(params, cb) {
   if (params.signature) {
     checkSignature(params.signature, params.timestamp, params.nonce, params.echostr, cb);
@@ -22,21 +13,17 @@ exports.exec = function(params, cb) {
 var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
   var oriStr = [config.token, timestamp, nonce].sort().join('')
   var code = crypto.createHash('sha1').update(oriStr).digest('hex');
-  debug('code:', code)
   if (code == signature) {
     cb(null, echostr);
-    console.log('checkSignature successed!')
   } else {
     var err = new Error('Unauthorized');
     err.code = 401;
     cb(err);
-    console.log('checkSignature failed!')
   }
 }
 
 // 接收普通消息
 var receiveMessage = function(msg, cb) {
-  //console.log(msg.xml);
   var result = {
     xml: {
       ToUserName: msg.xml.FromUserName[0],
@@ -46,9 +33,5 @@ var receiveMessage = function(msg, cb) {
       Content: '你好，你发的内容是「' + msg.xml.Content + '」。'
     }
   }
-  //console.log(result);
   cb(null, result);
 }
-
-// module.exports = pub;
-//http://localhost:3000/weixin?FromUserName=chenda&ToUserName=sb&Content=goodbye
