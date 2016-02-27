@@ -32,14 +32,14 @@ switch (process.env.LC_APP_ENV) {
 
   // 当前环境为线上测试环境
   case 'stage':
-    config.host = 'http://stg-idogogo.leanapp.cn';
-    config.webHost = 'http://stg-idogogo.leanapp.cn';
+    config.host = 'http://stg-chenda1995.leanapp.cn';
+    config.webHost = 'http://stg-chenda1995.leanapp.cn';
   break;
 
   // 当前环境为线上正式运行的环境
   case 'production':
-    config.host = 'http://idogogo.leanapp.cn';
-    config.webHost = 'http://idogogo.leanapp.cn';
+    config.host = 'http://chenda1995.leanapp.cn';
+    config.webHost = 'http://chenda1995.leanapp.cn';
   break;
 }
 
