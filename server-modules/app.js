@@ -13,6 +13,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const AV = require('leanengine');
+const xml2js = require('xml2js');
 const app = express();
 
 // babel 编译
@@ -23,8 +24,8 @@ const apiRouter = require('./api-router');
 const tool = require('./tool');
 const config = require('./config');
 
-var xml2js = require('xml2js');
-var utils = require('connect').utils;
+
+//var utils = require('connect').utils;
 
 // 解析微信的 xml 数据
 var xmlBodyParser = function (req, res, next) {
@@ -35,7 +36,7 @@ var xmlBodyParser = function (req, res, next) {
   if ('GET' == req.method || 'HEAD' == req.method) return next();
 
   // check Content-Type
-  if ('text/xml' != utils.mime(req)) return next();
+  //if ('text/xml' != utils.mime(req)) return next();
 
   // flag as parsed
   req._body = true;
