@@ -1,8 +1,6 @@
 /**
- * 每位工程师都有保持代码优雅的义务
- * Each engineer has a duty to keep the code elegant
- *
- * @author wangxiao
+ * 微信街口路由函数类
+ * 主要暴露微信访问接口
  */
 
 // 一些工具方法
@@ -26,6 +24,7 @@ pub.wechat_get = (req, res) => {
   });
 };
 
+//微信公众号信息接收接口
 pub.wechat_post = (req, res) =>{
   console.log('weixin req:', req.body);
   weixin.exec(req.body, function(err, data) {

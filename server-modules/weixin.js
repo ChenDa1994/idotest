@@ -30,8 +30,22 @@ var receiveMessage = function(msg, cb) {
       FromUserName: '' + msg.xml.ToUserName + '',
       CreateTime: new Date().getTime(),
       MsgType: 'text',
-      Content: '你好，你发的内容是「' + msg.xml.Content + '」。'
+      //Content: '你好，你发的内容是「' + msg.xml.Content + '」。'
+      Content: ''
     }
   }
+  handlerMessage(msg,result);
   cb(null, result);
+}
+
+//处理消息
+var handlerMessage = function(msg,result){
+  var msgType = msg.xml.MsgType;
+  var content = '';
+  if(msgType == 'text'){
+    content = '【我赌我坚持】请发送语音或者图片以完成今日打卡（图片为今日学习笔记，语音为口语练习记录）';
+  }else if(msgType == 'image' || msgType == 'voice'){
+    content = '【我赌我坚持】成功发送一条打卡记录，继续加油哦';
+  }
+  result.xml.Content = content;
 }
