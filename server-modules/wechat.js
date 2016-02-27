@@ -10,7 +10,7 @@
 
 const tool = require('./tool');
 const mrender = require('./tools/mrender')
-
+const xml2js = require('xml2js')
 var weixin = require('./weixin.js')
 
 let pub = {};
