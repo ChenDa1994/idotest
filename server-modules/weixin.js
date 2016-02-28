@@ -46,6 +46,9 @@ var handlerMessage = function(msg,result){
     content = '【我赌我坚持】请发送语音或者图片以完成今日打卡（图片为今日学习笔记，语音为口语练习记录）';
   }else if(msgType == 'image' || msgType == 'voice'){
     content = '【我赌我坚持】成功发送一条打卡记录，继续加油哦';
+  }else if(msgType == 'event'){
+    content = '【我赌我坚持】成功完成今天打卡.'
+    console.log(msg.xml.EventKey);
   }
   result.xml.Content = content;
 }
