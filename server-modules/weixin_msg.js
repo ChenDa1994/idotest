@@ -9,7 +9,7 @@
  exports.handler = msgHandler
 
  //处理发送来的消息接口
-function msgHandler(msg){
+function msgHandler(msg, cb){
    var msgType = msg.xml.MsgType;
    //基础消息模板
    var baseResult = getBaseResult(msg)
@@ -24,7 +24,7 @@ function msgHandler(msg){
    }else{
      baseResult.xml.Content = msgConfig.UNKNOWN_MSG;
    }
-   return baseResult;
+   return cb(null, baseResult);
 }
 
 //获取消息模板

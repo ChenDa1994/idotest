@@ -1,3 +1,9 @@
+/**
+ * 微信消息接受函数回调类，该类主要负责消息的处理
+ *
+ * @author yiliang.guo
+ */
+
 var crypto = require('crypto');
 var config = require('./config/wechat.js');
 var eventHandler = require('./weixin_event.js')
@@ -26,10 +32,11 @@ var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
 
 // 接收普通消息
 var receiveMessage = function(msg, cb) {
-  var msgType = msg.xml.MsgType;
-  if(msgType === 'event'){
-    cb(null, eventHandler.handler(msg));
+  var msgType = msg.xml.MsgType[0];
+  console.log('msgType[' + msgType+ ']');
+  if(msgType == 'event'){
+    eventHandler.handler(msg, cb);
   }else{
-    cb(null, msgHandler.handler(msg));
+    msgHandler.handler(msg, cb);
   }
 }
