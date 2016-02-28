@@ -8,7 +8,7 @@
      {
          "type":"view",
          "name":"今日任务",
-         "key":"http://idogogo.leanapp.cn/page/today"
+         "url":"http://idogogo.leanapp.cn/page/today"
      },
      {
           "name":"赌局",
@@ -24,10 +24,16 @@
               "url":"http://idogogo.leanapp.cn/page/passtask"
            },
            {
+              "type":"click",
+              "name":"现在加入",
+              "url":"JOIN_CLASS"
+           },
+           {
               "type":"view",
               "name":"关于赌局",
               "url":"http://idogogo.leanapp.cn/page/about"
-           }]
+           }
+        ]
     }
   ]
 }

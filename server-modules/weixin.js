@@ -1,5 +1,7 @@
 var crypto = require('crypto');
 var config = require('./config/wechat.js');
+var eventHandler = require('./weixin_event.js')
+var msgHandler = require('./weixin_msg.js')
 
 exports.exec = function(params, cb) {
   if (params.signature) {
@@ -24,31 +26,10 @@ var checkSignature = function(signature, timestamp, nonce, echostr, cb) {
 
 // 接收普通消息
 var receiveMessage = function(msg, cb) {
-  var result = {
-    xml: {
-      ToUserName: msg.xml.FromUserName[0],
-      FromUserName: '' + msg.xml.ToUserName + '',
-      CreateTime: new Date().getTime(),
-      MsgType: 'text',
-      //Content: '你好，你发的内容是「' + msg.xml.Content + '」。'
-      Content: ''
-    }
-  }
-  handlerMessage(msg,result);
-  cb(null, result);
-}
-
-//处理消息
-var handlerMessage = function(msg,result){
   var msgType = msg.xml.MsgType;
-  var content = '';
-  if(msgType == 'text'){
-    content = '【我赌我坚持】请发送语音或者图片以完成今日打卡（图片为今日学习笔记，语音为口语练习记录）';
-  }else if(msgType == 'image' || msgType == 'voice'){
-    content = '【我赌我坚持】成功发送一条打卡记录，继续加油哦';
-  }else if(msgType == 'event'){
-    content = '【我赌我坚持】成功完成今天打卡.'
-    console.log(msg.xml.EventKey);
+  if(msgType === 'event'){
+    cb(null, eventHandler.handler(msg));
+  }else{
+    cb(null, msgHandler.handler(msg));
   }
-  result.xml.Content = content;
 }
